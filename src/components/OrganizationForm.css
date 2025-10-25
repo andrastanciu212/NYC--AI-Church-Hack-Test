@@ -1,0 +1,182 @@
+.org-form {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.form-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.btn-close {
+  background: #f1f5f9;
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.btn-close:hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.error-message {
+  background: #fef2f2;
+  color: #991b1b;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.services-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.service-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #334155;
+}
+
+.service-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.service-details {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px;
+  margin-left: 26px;
+}
+
+.service-details select,
+.service-details input {
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #334155;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: #334155;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .org-form {
+    padding: 24px 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-details {
+    grid-template-columns: 1fr;
+  }
+}

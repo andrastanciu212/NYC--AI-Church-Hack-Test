@@ -1,0 +1,114 @@
+.org-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.org-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.org-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.org-filters {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+}
+
+.filter-group select {
+  padding: 10px 12px;
+}
+
+.filter-stats {
+  margin-left: auto;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .org-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .org-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+
+  .filter-stats {
+    margin-left: 0;
+  }
+
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .modal-content {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}

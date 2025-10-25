@@ -1,0 +1,294 @@
+.gap-analysis {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.gap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gap-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.coverage-section {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.coverage-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.coverage-table {
+  overflow-x: auto;
+}
+
+.coverage-header,
+.coverage-row {
+  display: grid;
+  grid-template-columns: 200px repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.coverage-cell {
+  padding: 12px;
+  text-align: center;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.header-cell {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+.service-name {
+  text-align: left;
+  font-weight: 500;
+  color: #2c3e50;
+  background: #f8fafc;
+}
+
+.coverage-value {
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.coverage-value:hover {
+  transform: scale(1.05);
+}
+
+.no-coverage {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.low-coverage {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.medium-coverage {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.high-coverage {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.gaps-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gaps-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gaps-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.gap-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gap-filters select {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.gaps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gap-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gap-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.gap-card.severity-critical {
+  border-left-color: #dc2626;
+}
+
+.gap-card.severity-high {
+  border-left-color: #ea580c;
+}
+
+.gap-card.severity-medium {
+  border-left-color: #ca8a04;
+}
+
+.gap-card.severity-low {
+  border-left-color: #65a30d;
+}
+
+.gap-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.gap-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.gap-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.severity-badge {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.severity-badge.critical {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.severity-badge.high {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.severity-badge.medium {
+  background: #fefce8;
+  color: #854d0e;
+}
+
+.severity-badge.low {
+  background: #f7fee7;
+  color: #365314;
+}
+
+.borough-badge {
+  background: #f0fdf4;
+  color: #166534;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.neighborhood-text {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.status-select {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.status-select.status-open {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.status-select.status-in_progress {
+  background: #fef9c3;
+  color: #854d0e;
+  border-color: #fde68a;
+}
+
+.status-select.status-resolved {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.gap-description {
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.gap-footer {
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+@media (max-width: 1024px) {
+  .coverage-header,
+  .coverage-row {
+    grid-template-columns: 150px repeat(5, 80px);
+  }
+}
+
+@media (max-width: 768px) {
+  .gap-header,
+  .gaps-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gap-filters {
+    flex-direction: column;
+  }
+
+  .gap-filters select {
+    width: 100%;
+  }
+
+  .coverage-table {
+    overflow-x: scroll;
+  }
+
+  .gap-card-header {
+    flex-direction: column;
+  }
+}
