@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import HeatmapView from './HeatmapView';
 import './Dashboard.css';
 
 interface Stats {
@@ -83,24 +84,9 @@ function Dashboard() {
       </section>
 
       <div className="breakdown-grid">
-        <section className="breakdown-card">
-          <h2>Organizations by Borough</h2>
-          <div className="breakdown-list">
-            {Object.entries(stats.byBorough).map(([borough, count]) => (
-              <div key={borough} className="breakdown-item">
-                <span className="breakdown-label">{borough}</span>
-                <div className="breakdown-bar-container">
-                  <div
-                    className="breakdown-bar"
-                    style={{
-                      width: `${(count / stats.totalOrgs) * 100}%`,
-                    }}
-                  />
-                </div>
-                <span className="breakdown-value">{count}</span>
-              </div>
-            ))}
-          </div>
+        <section className="breakdown-card map-card">
+          <h2>Service Coverage Heatmap</h2>
+          <HeatmapView stats={stats} />
         </section>
 
         <section className="breakdown-card">
