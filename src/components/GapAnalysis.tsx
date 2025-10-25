@@ -16,9 +16,18 @@ interface ServiceCoverage {
   category_name: string;
   coverage: {
     borough: string;
+    neighborhood: string;
     count: number;
   }[];
 }
+
+const neighborhoodsByBorough: Record<string, string[]> = {
+  'Manhattan': ['Upper East Side', 'Upper West Side', 'Harlem', 'East Harlem', 'Washington Heights', 'Inwood', 'Midtown', 'Chelsea', 'Greenwich Village', 'Lower East Side', 'Chinatown', 'Financial District'],
+  'Brooklyn': ['Williamsburg', 'Bushwick', 'Bedford-Stuyvesant', 'Crown Heights', 'Park Slope', 'Sunset Park', 'Bay Ridge', 'Coney Island', 'Flatbush', 'East New York', 'Brownsville'],
+  'Queens': ['Astoria', 'Long Island City', 'Flushing', 'Jamaica', 'Forest Hills', 'Elmhurst', 'Jackson Heights', 'Corona', 'Ridgewood', 'Bayside', 'Far Rockaway'],
+  'Bronx': ['South Bronx', 'Mott Haven', 'Hunts Point', 'Fordham', 'Belmont', 'Morris Heights', 'Riverdale', 'Pelham Bay', 'Throggs Neck', 'Co-op City'],
+  'Staten Island': ['St. George', 'Stapleton', 'Port Richmond', 'New Brighton', 'Tottenville', 'Great Kills', 'Eltingville', 'Annadale', 'West Brighton']
+};
 
 function GapAnalysis() {
   const [gaps, setGaps] = useState<GapWithCategory[]>([]);
@@ -27,8 +36,10 @@ function GapAnalysis() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [filterBorough, setFilterBorough] = useState<string>('all');
+  const [filterNeighborhood, setFilterNeighborhood] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterSeverity, setFilterSeverity] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'borough' | 'neighborhood'>('borough');
 
   const boroughs = ['Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
 
@@ -55,24 +66,30 @@ function GapAnalysis() {
         setServiceCategories(categoriesResult.data);
 
         const coverageData: ServiceCoverage[] = (categoriesResult.data as any[]).map((category: any) => {
-          const boroughCounts = boroughs.map(borough => {
-            const orgsInBorough = (orgsResult.data as any[])?.filter((org: any) => org.borough === borough) || [];
-            const serviceCount = (orgServicesResult.data as any[])?.filter(
-              (service: any) =>
-                service.service_category_id === category.id &&
-                orgsInBorough.some((org: any) => org.id === service.organization_id)
-            ).length || 0;
+          const locationCounts = boroughs.flatMap(borough => {
+            const neighborhoods = neighborhoodsByBorough[borough] || [];
+            return neighborhoods.map(neighborhood => {
+              const orgsInLocation = (orgsResult.data as any[])?.filter(
+                (org: any) => org.borough === borough && org.neighborhood === neighborhood
+              ) || [];
+              const serviceCount = (orgServicesResult.data as any[])?.filter(
+                (service: any) =>
+                  service.service_category_id === category.id &&
+                  orgsInLocation.some((org: any) => org.id === service.organization_id)
+              ).length || 0;
 
-            return {
-              borough,
-              count: serviceCount,
-            };
+              return {
+                borough,
+                neighborhood,
+                count: serviceCount,
+              };
+            });
           });
 
           return {
             category_id: category.id,
             category_name: category.name,
-            coverage: boroughCounts,
+            coverage: locationCounts,
           };
         });
 
@@ -127,10 +144,36 @@ function GapAnalysis() {
 
   const filteredGaps = gaps.filter(gap => {
     if (filterBorough !== 'all' && gap.borough !== filterBorough) return false;
+    if (filterNeighborhood !== 'all' && gap.neighborhood !== filterNeighborhood) return false;
     if (filterStatus !== 'all' && gap.status !== filterStatus) return false;
     if (filterSeverity !== 'all' && gap.severity !== filterSeverity) return false;
     return true;
   });
+
+  const availableNeighborhoods = filterBorough === 'all'
+    ? []
+    : neighborhoodsByBorough[filterBorough] || [];
+
+  const filteredCoverage = viewMode === 'borough'
+    ? coverage.map(service => ({
+        ...service,
+        coverage: boroughs.map(borough => {
+          const boroughTotal = service.coverage
+            .filter(c => c.borough === borough)
+            .reduce((sum, c) => sum + c.count, 0);
+          return {
+            borough,
+            neighborhood: '',
+            count: boroughTotal,
+          };
+        }),
+      }))
+    : filterBorough === 'all'
+    ? coverage
+    : coverage.map(service => ({
+        ...service,
+        coverage: service.coverage.filter(c => c.borough === filterBorough),
+      }));
 
   if (loading) {
     return <div className="loading">Loading gap analysis...</div>;
@@ -146,32 +189,83 @@ function GapAnalysis() {
       </div>
 
       <section className="coverage-section">
-        <h3>Service Coverage Heatmap</h3>
-        <div className="coverage-table">
-          <div className="coverage-header">
-            <div className="coverage-cell header-cell">Service</div>
-            {boroughs.map(borough => (
-              <div key={borough} className="coverage-cell header-cell">
-                {borough}
+        <div className="coverage-header-section">
+          <h3>Service Coverage Heatmap</h3>
+          <div className="view-mode-toggle">
+            <button
+              className={viewMode === 'borough' ? 'active' : ''}
+              onClick={() => {
+                setViewMode('borough');
+                setFilterBorough('all');
+                setFilterNeighborhood('all');
+              }}
+            >
+              By Borough
+            </button>
+            <button
+              className={viewMode === 'neighborhood' ? 'active' : ''}
+              onClick={() => setViewMode('neighborhood')}
+            >
+              By Neighborhood
+            </button>
+          </div>
+        </div>
+
+        {viewMode === 'neighborhood' && (
+          <div className="neighborhood-selector">
+            <select value={filterBorough} onChange={(e) => {
+              setFilterBorough(e.target.value);
+              setFilterNeighborhood('all');
+            }}>
+              <option value="all">Select a Borough</option>
+              {boroughs.map(borough => (
+                <option key={borough} value={borough}>{borough}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className="coverage-table-wrapper">
+          <div className="coverage-table">
+            <div className="coverage-header">
+              <div className="coverage-cell header-cell">Service</div>
+              {viewMode === 'borough' ? (
+                boroughs.map(borough => (
+                  <div key={borough} className="coverage-cell header-cell">
+                    {borough}
+                  </div>
+                ))
+              ) : filterBorough === 'all' ? (
+                <div className="coverage-cell header-cell">Select a borough to view neighborhoods</div>
+              ) : (
+                availableNeighborhoods.map(neighborhood => (
+                  <div key={neighborhood} className="coverage-cell header-cell neighborhood-header">
+                    {neighborhood}
+                  </div>
+                ))
+              )}
+            </div>
+            {filteredCoverage.map(service => (
+              <div key={service.category_id} className="coverage-row">
+                <div className="coverage-cell service-name">{service.category_name}</div>
+                {viewMode === 'borough' || filterBorough !== 'all' ? (
+                  service.coverage.map(({ borough, neighborhood, count }) => (
+                    <div
+                      key={viewMode === 'borough' ? borough : `${borough}-${neighborhood}`}
+                      className={`coverage-cell coverage-value ${
+                        count === 0 ? 'no-coverage' : count < 2 ? 'low-coverage' : count < 4 ? 'medium-coverage' : 'high-coverage'
+                      }`}
+                      title={`${count} organizations providing ${service.category_name} in ${neighborhood || borough}`}
+                    >
+                      {count}
+                    </div>
+                  ))
+                ) : (
+                  <div className="coverage-cell">-</div>
+                )}
               </div>
             ))}
           </div>
-          {coverage.map(service => (
-            <div key={service.category_id} className="coverage-row">
-              <div className="coverage-cell service-name">{service.category_name}</div>
-              {service.coverage.map(({ borough, count }) => (
-                <div
-                  key={borough}
-                  className={`coverage-cell coverage-value ${
-                    count === 0 ? 'no-coverage' : count < 3 ? 'low-coverage' : count < 6 ? 'medium-coverage' : 'high-coverage'
-                  }`}
-                  title={`${count} organizations providing ${service.category_name} in ${borough}`}
-                >
-                  {count}
-                </div>
-              ))}
-            </div>
-          ))}
         </div>
       </section>
 
@@ -179,12 +273,23 @@ function GapAnalysis() {
         <div className="gaps-header">
           <h3>Reported Gaps</h3>
           <div className="gap-filters">
-            <select value={filterBorough} onChange={(e) => setFilterBorough(e.target.value)}>
+            <select value={filterBorough} onChange={(e) => {
+              setFilterBorough(e.target.value);
+              setFilterNeighborhood('all');
+            }}>
               <option value="all">All Boroughs</option>
               {boroughs.map(borough => (
                 <option key={borough} value={borough}>{borough}</option>
               ))}
             </select>
+            {filterBorough !== 'all' && availableNeighborhoods.length > 0 && (
+              <select value={filterNeighborhood} onChange={(e) => setFilterNeighborhood(e.target.value)}>
+                <option value="all">All Neighborhoods</option>
+                {availableNeighborhoods.map(neighborhood => (
+                  <option key={neighborhood} value={neighborhood}>{neighborhood}</option>
+                ))}
+              </select>
+            )}
             <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
               <option value="all">All Statuses</option>
               <option value="open">Open</option>
