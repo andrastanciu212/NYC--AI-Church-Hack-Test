@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import './MapView.css';
 
 type Organization = Database['public']['Tables']['organizations']['Row'];
+type GapReport = Database['public']['Tables']['gap_reports']['Row'];
 
 interface OrganizationWithServices extends Organization {
   services?: Array<{
@@ -15,6 +16,10 @@ interface OrganizationWithServices extends Organization {
     notes: string | null;
     service_name: string;
   }>;
+}
+
+interface GapWithService extends GapReport {
+  service_name?: string;
 }
 
 const boroughCoordinates: Record<string, { lat: number; lng: number }> = {
@@ -27,9 +32,12 @@ const boroughCoordinates: Record<string, { lat: number; lng: number }> = {
 
 function MapView() {
   const [organizations, setOrganizations] = useState<OrganizationWithServices[]>([]);
+  const [gaps, setGaps] = useState<GapWithService[]>([]);
   const [selectedOrg, setSelectedOrg] = useState<OrganizationWithServices | null>(null);
+  const [selectedGap, setSelectedGap] = useState<GapWithService | null>(null);
   const [filterBorough, setFilterBorough] = useState<string>('all');
   const [filterType, setFilterType] = useState<string>('all');
+  const [showGaps, setShowGaps] = useState<boolean>(true);
   const [loading, setLoading] = useState(true);
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMapRef = useRef<L.Map | null>(null);
@@ -49,11 +57,11 @@ function MapView() {
     if (leafletMapRef.current) {
       updateMarkers();
     }
-  }, [filterBorough, filterType, organizations]);
+  }, [filterBorough, filterType, showGaps, organizations, gaps]);
 
   const loadData = async () => {
     try {
-      const [orgsResult, categoriesResult] = await Promise.all([
+      const [orgsResult, categoriesResult, gapsResult] = await Promise.all([
         supabase
           .from('organizations')
           .select('*')
@@ -63,6 +71,10 @@ function MapView() {
           .from('service_categories')
           .select('*')
           .order('name'),
+        supabase
+          .from('gap_reports')
+          .select('*')
+          .order('created_at', { ascending: false }),
       ]);
 
       if (orgsResult.data) {
@@ -91,6 +103,20 @@ function MapView() {
         );
 
         setOrganizations(orgsWithServices);
+      }
+
+      if (gapsResult.data) {
+        const gapsWithService = (gapsResult.data as any[]).map((gap: any) => {
+          const category = (categoriesResult.data as any[])?.find(
+            (c: any) => c.id === gap.service_category_id
+          );
+          return {
+            ...gap,
+            service_name: category?.name || 'Unknown Service',
+          } as GapWithService;
+        });
+
+        setGaps(gapsWithService);
       }
     } catch (error) {
       console.error('Error loading map data:', error);
@@ -214,6 +240,7 @@ function MapView() {
 
             marker.on('click', () => {
               setSelectedOrg(org);
+              setSelectedGap(null);
             });
 
             markersRef.current.push(marker);
@@ -221,6 +248,67 @@ function MapView() {
         })
         .catch(err => console.error('Geocoding error:', err));
     });
+
+    if (showGaps) {
+      const filteredGaps = gaps.filter(gap => {
+        if (filterBorough !== 'all' && gap.borough !== filterBorough) return false;
+        return true;
+      });
+
+      filteredGaps.forEach(gap => {
+        const coords = boroughCoordinates[gap.borough];
+        if (!coords) return;
+
+        const offset = Math.random() * 0.02 - 0.01;
+        const lat = coords.lat + offset;
+        const lng = coords.lng + offset;
+
+        const color = gap.severity === 'critical' ? '#dc2626' :
+                      gap.severity === 'high' ? '#ea580c' :
+                      gap.severity === 'medium' ? '#ca8a04' : '#65a30d';
+
+        const icon = L.divIcon({
+          className: 'gap-marker',
+          html: `
+            <div style="
+              width: 24px;
+              height: 24px;
+              background-color: ${color};
+              border: 2px solid white;
+              border-radius: 4px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              color: white;
+              font-size: 14px;
+              box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+              transform: rotate(45deg);
+            "><div style="transform: rotate(-45deg);">!</div></div>
+          `,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12],
+        });
+
+        const marker = L.marker([lat, lng], { icon })
+          .addTo(leafletMapRef.current!);
+
+        marker.bindPopup(`
+          <div style="padding: 8px; max-width: 250px;">
+            <h4 style="margin: 0 0 6px 0; font-size: 14px; color: #2c3e50;">Service Gap</h4>
+            <p style="margin: 0 0 4px 0; font-size: 12px; color: #64748b;"><strong>${gap.service_name}</strong></p>
+            <p style="margin: 0; font-size: 11px; color: #94a3b8;">${gap.borough}${gap.neighborhood ? ', ' + gap.neighborhood : ''}</p>
+          </div>
+        `);
+
+        marker.on('click', () => {
+          setSelectedGap(gap);
+          setSelectedOrg(null);
+        });
+
+        markersRef.current.push(marker);
+      });
+    }
   };
 
   const boroughs = ['Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
@@ -254,6 +342,10 @@ function MapView() {
             <div className="legend-marker none"></div>
             <span>No Coverage</span>
           </div>
+          <div className="legend-item">
+            <div className="legend-marker gap"></div>
+            <span>Service Gaps</span>
+          </div>
         </div>
       </div>
 
@@ -277,88 +369,149 @@ function MapView() {
             <option value="civic_group">Civic Group</option>
           </select>
         </div>
+        <div className="filter-group">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={showGaps}
+              onChange={(e) => setShowGaps(e.target.checked)}
+            />
+            Show Service Gaps
+          </label>
+        </div>
       </div>
 
       <div className="map-container-with-sidebar">
         <div ref={mapRef} className="leaflet-map"></div>
 
-        {selectedOrg && (
+        {(selectedOrg || selectedGap) && (
           <div className="org-detail-sidebar">
             <div className="sidebar-header">
-              <h3>{selectedOrg.name}</h3>
+              <h3>{selectedOrg ? selectedOrg.name : 'Service Gap'}</h3>
               <button
                 className="close-sidebar"
-                onClick={() => setSelectedOrg(null)}
+                onClick={() => {
+                  setSelectedOrg(null);
+                  setSelectedGap(null);
+                }}
               >
                 ✕
               </button>
             </div>
 
             <div className="sidebar-content">
-              <div className="org-meta">
-                <span className="org-type-badge">
-                  {selectedOrg.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                </span>
-                <span className="org-borough-badge">{selectedOrg.borough}</span>
-              </div>
-
-              {selectedOrg.neighborhood && (
-                <div className="detail-section">
-                  <strong>Neighborhood:</strong> {selectedOrg.neighborhood}
-                </div>
-              )}
-
-              {selectedOrg.address && (
-                <div className="detail-section">
-                  <strong>Address:</strong> {selectedOrg.address}
-                </div>
-              )}
-
-              {selectedOrg.description && (
-                <div className="detail-section">
-                  <strong>About:</strong>
-                  <p>{selectedOrg.description}</p>
-                </div>
-              )}
-
-              {selectedOrg.services && selectedOrg.services.length > 0 && (
-                <div className="detail-section">
-                  <strong>Services:</strong>
-                  <div className="service-tags">
-                    {selectedOrg.services.map((service) => (
-                      <span key={service.id} className="service-tag">
-                        {service.service_name}
-                        {service.capacity && ` (${service.capacity})`}
-                      </span>
-                    ))}
+              {selectedOrg && (
+                <>
+                  <div className="org-meta">
+                    <span className="org-type-badge">
+                      {selectedOrg.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </span>
+                    <span className="org-borough-badge">{selectedOrg.borough}</span>
                   </div>
-                </div>
+
+                  {selectedOrg.neighborhood && (
+                    <div className="detail-section">
+                      <strong>Neighborhood:</strong> {selectedOrg.neighborhood}
+                    </div>
+                  )}
+
+                  {selectedOrg.address && (
+                    <div className="detail-section">
+                      <strong>Address:</strong> {selectedOrg.address}
+                    </div>
+                  )}
+
+                  {selectedOrg.description && (
+                    <div className="detail-section">
+                      <strong>About:</strong>
+                      <p>{selectedOrg.description}</p>
+                    </div>
+                  )}
+
+                  {selectedOrg.services && selectedOrg.services.length > 0 && (
+                    <div className="detail-section">
+                      <strong>Services:</strong>
+                      <div className="service-tags">
+                        {selectedOrg.services.map((service) => (
+                          <span key={service.id} className="service-tag">
+                            {service.service_name}
+                            {service.capacity && ` (${service.capacity})`}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {(selectedOrg.contact_email || selectedOrg.contact_phone || selectedOrg.website) && (
+                    <div className="detail-section contact-section">
+                      <strong>Contact:</strong>
+                      {selectedOrg.contact_email && (
+                        <a href={`mailto:${selectedOrg.contact_email}`} className="contact-link">
+                          {selectedOrg.contact_email}
+                        </a>
+                      )}
+                      {selectedOrg.contact_phone && (
+                        <a href={`tel:${selectedOrg.contact_phone}`} className="contact-link">
+                          {selectedOrg.contact_phone}
+                        </a>
+                      )}
+                      {selectedOrg.website && (
+                        <a
+                          href={selectedOrg.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="contact-link"
+                        >
+                          Visit Website
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
 
-              {(selectedOrg.contact_email || selectedOrg.contact_phone || selectedOrg.website) && (
-                <div className="detail-section contact-section">
-                  <strong>Contact:</strong>
-                  {selectedOrg.contact_email && (
-                    <a href={`mailto:${selectedOrg.contact_email}`} className="contact-link">
-                      {selectedOrg.contact_email}
-                    </a>
+              {selectedGap && (
+                <>
+                  <div className="org-meta">
+                    <span className={`severity-badge ${selectedGap.severity}`}>
+                      {selectedGap.severity.toUpperCase()}
+                    </span>
+                    <span className="org-borough-badge">{selectedGap.borough}</span>
+                  </div>
+
+                  {selectedGap.neighborhood && (
+                    <div className="detail-section">
+                      <strong>Neighborhood:</strong> {selectedGap.neighborhood}
+                    </div>
                   )}
-                  {selectedOrg.contact_phone && (
-                    <a href={`tel:${selectedOrg.contact_phone}`} className="contact-link">
-                      {selectedOrg.contact_phone}
-                    </a>
+
+                  <div className="detail-section">
+                    <strong>Service Needed:</strong>
+                    <p>{selectedGap.service_name}</p>
+                  </div>
+
+                  <div className="detail-section">
+                    <strong>Description:</strong>
+                    <p>{selectedGap.description}</p>
+                  </div>
+
+                  {selectedGap.reported_by && (
+                    <div className="detail-section">
+                      <strong>Reported By:</strong>
+                      <p>{selectedGap.reported_by}</p>
+                    </div>
                   )}
-                  {selectedOrg.website && (
-                    <a
-                      href={selectedOrg.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="contact-link"
-                    >
-                      Visit Website
-                    </a>
-                  )}
-                </div>
+
+                  <div className="detail-section">
+                    <strong>Status:</strong>
+                    <p style={{ textTransform: 'capitalize' }}>{selectedGap.status.replace('_', ' ')}</p>
+                  </div>
+
+                  <div className="detail-section">
+                    <strong>Reported:</strong>
+                    <p>{new Date(selectedGap.created_at).toLocaleDateString()}</p>
+                  </div>
+                </>
               )}
             </div>
           </div>
