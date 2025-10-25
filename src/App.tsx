@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import OrganizationManager from './components/OrganizationManager';
 import GapAnalysis from './components/GapAnalysis';
@@ -7,8 +9,21 @@ import './App.css';
 
 type View = 'dashboard' | 'organizations' | 'gaps' | 'map';
 
-function App() {
+function AppContent() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
+  const { user, loading, signOut } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="app loading-screen">
+        <div className="loading">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Login onLogin={() => {}} />;
+  }
 
   return (
     <div className="app">
@@ -17,6 +32,9 @@ function App() {
           <h1>NYC Ecosystem Gap Finder</h1>
           <p className="tagline">Mapping faith and community resources across the 5 boroughs</p>
         </div>
+        <button onClick={signOut} className="sign-out-button">
+          Sign Out
+        </button>
       </header>
 
       <nav className="nav">
@@ -53,6 +71,14 @@ function App() {
         {currentView === 'gaps' && <GapAnalysis />}
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
