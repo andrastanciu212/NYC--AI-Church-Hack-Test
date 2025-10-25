@@ -7,7 +7,7 @@ interface LoginProps {
 }
 
 function Login({ onLogin }: LoginProps) {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isJoin, setIsJoin] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,7 +21,7 @@ function Login({ onLogin }: LoginProps) {
     setMessage(null);
 
     try {
-      if (isSignUp) {
+      if (isJoin) {
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -30,7 +30,7 @@ function Login({ onLogin }: LoginProps) {
         if (error) throw error;
 
         setMessage('Account created successfully! You can now sign in.');
-        setIsSignUp(false);
+        setIsJoin(false);
         setEmail('');
         setPassword('');
       } else {
@@ -59,7 +59,7 @@ function Login({ onLogin }: LoginProps) {
         </p>
 
         <form onSubmit={handleSubmit} className="login-form">
-          <h2>{isSignUp ? 'Create Account' : 'Sign In'}</h2>
+          <h2>{isJoin ? 'Join' : 'Sign In'}</h2>
 
           {error && <div className="error-message">{error}</div>}
           {message && <div className="success-message">{message}</div>}
@@ -92,22 +92,22 @@ function Login({ onLogin }: LoginProps) {
           </div>
 
           <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
+            {loading ? 'Loading...' : isJoin ? 'Join' : 'Sign In'}
           </button>
 
           <div className="toggle-mode">
-            {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+            {isJoin ? 'Already have an account?' : "Don't have an account?"}
             <button
               type="button"
               onClick={() => {
-                setIsSignUp(!isSignUp);
+                setIsJoin(!isJoin);
                 setError(null);
                 setMessage(null);
               }}
               className="toggle-button"
               disabled={loading}
             >
-              {isSignUp ? 'Sign In' : 'Sign Up'}
+              {isJoin ? 'Sign In' : 'Join'}
             </button>
           </div>
         </form>
