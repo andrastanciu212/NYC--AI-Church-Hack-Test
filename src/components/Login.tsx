@@ -53,7 +53,7 @@ function Login({ onLogin }: LoginProps) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>See New York</h1>
+        <img src="/unnamed-10.png" alt="See New York" className="login-logo" />
         <p className="login-subtitle">
           Track and analyze service gaps across New York City
         </p>

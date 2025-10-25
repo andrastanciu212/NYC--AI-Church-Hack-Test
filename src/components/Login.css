@@ -16,6 +16,14 @@
   width: 100%;
 }
 
+.login-logo {
+  display: block;
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 24px auto;
+}
+
 .login-box h1 {
   font-size: 28px;
   font-weight: 700;
