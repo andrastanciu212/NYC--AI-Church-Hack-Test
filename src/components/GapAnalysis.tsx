@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
 import GapReportForm from './GapReportForm';
+import 'leaflet/dist/leaflet.css';
 import './GapAnalysis.css';
 
 type GapReport = Database['public']['Tables']['gap_reports']['Row'];
@@ -21,12 +23,73 @@ interface ServiceCoverage {
   }[];
 }
 
+interface NeighborhoodCoords {
+  lat: number;
+  lng: number;
+}
+
 const neighborhoodsByBorough: Record<string, string[]> = {
   'Manhattan': ['Upper East Side', 'Upper West Side', 'Harlem', 'East Harlem', 'Washington Heights', 'Inwood', 'Midtown', 'Chelsea', 'Greenwich Village', 'Lower East Side', 'Chinatown', 'Financial District'],
   'Brooklyn': ['Williamsburg', 'Bushwick', 'Bedford-Stuyvesant', 'Crown Heights', 'Park Slope', 'Sunset Park', 'Bay Ridge', 'Coney Island', 'Flatbush', 'East New York', 'Brownsville'],
   'Queens': ['Astoria', 'Long Island City', 'Flushing', 'Jamaica', 'Forest Hills', 'Elmhurst', 'Jackson Heights', 'Corona', 'Ridgewood', 'Bayside', 'Far Rockaway'],
   'Bronx': ['South Bronx', 'Mott Haven', 'Hunts Point', 'Fordham', 'Belmont', 'Morris Heights', 'Riverdale', 'Pelham Bay', 'Throggs Neck', 'Co-op City'],
   'Staten Island': ['St. George', 'Stapleton', 'Port Richmond', 'New Brighton', 'Tottenville', 'Great Kills', 'Eltingville', 'Annadale', 'West Brighton']
+};
+
+const neighborhoodCoordinates: Record<string, NeighborhoodCoords> = {
+  'Upper East Side': { lat: 40.7736, lng: -73.9566 },
+  'Upper West Side': { lat: 40.7870, lng: -73.9754 },
+  'Harlem': { lat: 40.8116, lng: -73.9465 },
+  'East Harlem': { lat: 40.7957, lng: -73.9389 },
+  'Washington Heights': { lat: 40.8501, lng: -73.9366 },
+  'Inwood': { lat: 40.8677, lng: -73.9212 },
+  'Midtown': { lat: 40.7549, lng: -73.9840 },
+  'Chelsea': { lat: 40.7465, lng: -74.0014 },
+  'Greenwich Village': { lat: 40.7336, lng: -74.0027 },
+  'Lower East Side': { lat: 40.7153, lng: -73.9874 },
+  'Chinatown': { lat: 40.7158, lng: -73.9970 },
+  'Financial District': { lat: 40.7074, lng: -74.0113 },
+  'Williamsburg': { lat: 40.7081, lng: -73.9571 },
+  'Bushwick': { lat: 40.6942, lng: -73.9194 },
+  'Bedford-Stuyvesant': { lat: 40.6872, lng: -73.9418 },
+  'Crown Heights': { lat: 40.6689, lng: -73.9423 },
+  'Park Slope': { lat: 40.6710, lng: -73.9778 },
+  'Sunset Park': { lat: 40.6447, lng: -74.0128 },
+  'Bay Ridge': { lat: 40.6259, lng: -74.0300 },
+  'Coney Island': { lat: 40.5755, lng: -73.9707 },
+  'Flatbush': { lat: 40.6527, lng: -73.9593 },
+  'East New York': { lat: 40.6591, lng: -73.8823 },
+  'Brownsville': { lat: 40.6620, lng: -73.9109 },
+  'Astoria': { lat: 40.7722, lng: -73.9300 },
+  'Long Island City': { lat: 40.7447, lng: -73.9485 },
+  'Flushing': { lat: 40.7673, lng: -73.8330 },
+  'Jamaica': { lat: 40.6916, lng: -73.8067 },
+  'Forest Hills': { lat: 40.7185, lng: -73.8448 },
+  'Elmhurst': { lat: 40.7361, lng: -73.8822 },
+  'Jackson Heights': { lat: 40.7557, lng: -73.8831 },
+  'Corona': { lat: 40.7472, lng: -73.8619 },
+  'Ridgewood': { lat: 40.7006, lng: -73.9056 },
+  'Bayside': { lat: 40.7685, lng: -73.7693 },
+  'Far Rockaway': { lat: 40.6054, lng: -73.7551 },
+  'South Bronx': { lat: 40.8165, lng: -73.9169 },
+  'Mott Haven': { lat: 40.8088, lng: -73.9222 },
+  'Hunts Point': { lat: 40.8134, lng: -73.8833 },
+  'Fordham': { lat: 40.8622, lng: -73.8985 },
+  'Belmont': { lat: 40.8556, lng: -73.8885 },
+  'Morris Heights': { lat: 40.8531, lng: -73.9189 },
+  'Riverdale': { lat: 40.8978, lng: -73.9095 },
+  'Pelham Bay': { lat: 40.8527, lng: -73.8270 },
+  'Throggs Neck': { lat: 40.8156, lng: -73.8236 },
+  'Co-op City': { lat: 40.8742, lng: -73.8300 },
+  'St. George': { lat: 40.6437, lng: -74.0776 },
+  'Stapleton': { lat: 40.6267, lng: -74.0779 },
+  'Port Richmond': { lat: 40.6339, lng: -74.1368 },
+  'New Brighton': { lat: 40.6417, lng: -74.0939 },
+  'Tottenville': { lat: 40.5054, lng: -74.2416 },
+  'Great Kills': { lat: 40.5542, lng: -74.1502 },
+  'Eltingville': { lat: 40.5449, lng: -74.1651 },
+  'Annadale': { lat: 40.5395, lng: -74.1788 },
+  'West Brighton': { lat: 40.6282, lng: -74.1098 }
 };
 
 function GapAnalysis() {
@@ -40,6 +103,7 @@ function GapAnalysis() {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterSeverity, setFilterSeverity] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'borough' | 'neighborhood'>('borough');
+  const [showMap, setShowMap] = useState(false);
 
   const boroughs = ['Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
 
@@ -271,7 +335,15 @@ function GapAnalysis() {
 
       <section className="gaps-section">
         <div className="gaps-header">
-          <h3>Reported Gaps</h3>
+          <div className="gaps-header-left">
+            <h3>Reported Gaps</h3>
+            <button
+              className={`toggle-view-button ${showMap ? 'active' : ''}`}
+              onClick={() => setShowMap(!showMap)}
+            >
+              {showMap ? 'Show List' : 'Show Map'}
+            </button>
+          </div>
           <div className="gap-filters">
             <select value={filterBorough} onChange={(e) => {
               setFilterBorough(e.target.value);
@@ -310,6 +382,64 @@ function GapAnalysis() {
           <div className="empty-state">
             <p>No gap reports found.</p>
             <p className="empty-hint">Report a gap to help identify service needs.</p>
+          </div>
+        ) : showMap ? (
+          <div className="gaps-map-container">
+            <MapContainer
+              center={[40.7128, -73.9]}
+              zoom={11}
+              style={{ height: '600px', width: '100%', borderRadius: '12px' }}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {filteredGaps.map(gap => {
+                const coords = gap.neighborhood ? neighborhoodCoordinates[gap.neighborhood] : null;
+                if (!coords) return null;
+
+                const severityColors = {
+                  critical: '#dc2626',
+                  high: '#ea580c',
+                  medium: '#ca8a04',
+                  low: '#65a30d'
+                };
+
+                return (
+                  <CircleMarker
+                    key={gap.id}
+                    center={[coords.lat, coords.lng]}
+                    radius={gap.severity === 'critical' ? 12 : gap.severity === 'high' ? 10 : gap.severity === 'medium' ? 8 : 6}
+                    fillColor={severityColors[gap.severity as keyof typeof severityColors]}
+                    color="#fff"
+                    weight={2}
+                    opacity={1}
+                    fillOpacity={0.7}
+                  >
+                    <Popup>
+                      <div className="map-popup">
+                        <h4>{gap.service_name}</h4>
+                        <div className="popup-meta">
+                          <span className={`severity-badge ${gap.severity}`}>
+                            {gap.severity.toUpperCase()}
+                          </span>
+                          <span className="status-badge status-${gap.status}">
+                            {gap.status.replace('_', ' ').toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="popup-location">
+                          <strong>{gap.neighborhood}</strong>, {gap.borough}
+                        </div>
+                        <p className="popup-description">{gap.description}</p>
+                        {gap.reported_by && (
+                          <div className="popup-reporter">Reported by: {gap.reported_by}</div>
+                        )}
+                      </div>
+                    </Popup>
+                  </CircleMarker>
+                );
+              })}
+            </MapContainer>
           </div>
         ) : (
           <div className="gaps-list">

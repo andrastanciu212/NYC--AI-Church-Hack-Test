@@ -174,10 +174,39 @@
   flex-wrap: wrap;
 }
 
+.gaps-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .gaps-header h3 {
   font-size: 18px;
   font-weight: 600;
   color: #2c3e50;
+  margin: 0;
+}
+
+.toggle-view-button {
+  padding: 8px 16px;
+  background: #f1f5f9;
+  color: #64748b;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-view-button:hover {
+  background: #e2e8f0;
+  color: #2c3e50;
+}
+
+.toggle-view-button.active {
+  background: #3b82f6;
+  color: white;
 }
 
 .gap-filters {
@@ -327,6 +356,71 @@
   border-top: 1px solid #e2e8f0;
   font-size: 13px;
   color: #64748b;
+}
+
+.gaps-map-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.map-popup h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+}
+
+.popup-meta {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.popup-location {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.popup-description {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+.popup-reporter {
+  font-size: 12px;
+  color: #64748b;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 8px;
+}
+
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.status-open {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.status-badge.status-in_progress {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.status-badge.status-resolved {
+  background: #d1fae5;
+  color: #065f46;
 }
 
 @media (max-width: 1024px) {
