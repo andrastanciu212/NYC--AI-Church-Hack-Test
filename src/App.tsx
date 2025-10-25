@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { supabase } from './lib/supabase';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import OrganizationManager from './components/OrganizationManager';
@@ -14,34 +13,9 @@ type View = 'dashboard' | 'organizations' | 'gaps' | 'map';
 function AppContent() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [showProfileForm, setShowProfileForm] = useState(false);
-  const [checkingProfile, setCheckingProfile] = useState(true);
   const { user, loading, signOut } = useAuth();
 
-  useEffect(() => {
-    if (user) {
-      checkProfile();
-    }
-  }, [user]);
-
-  const checkProfile = async () => {
-    try {
-      const { data } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', user!.id)
-        .maybeSingle();
-
-      if (!data) {
-        setShowProfileForm(true);
-      }
-    } catch (error) {
-      console.error('Error checking profile:', error);
-    } finally {
-      setCheckingProfile(false);
-    }
-  };
-
-  if (loading || checkingProfile) {
+  if (loading) {
     return (
       <div className="app loading-screen">
         <div className="loading">Loading...</div>
