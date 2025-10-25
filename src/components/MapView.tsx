@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
-import L from 'Leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './MapView.css';
 
