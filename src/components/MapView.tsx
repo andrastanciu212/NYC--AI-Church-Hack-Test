@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import './MapView.css';
 
 type Organization = Database['public']['Tables']['organizations']['Row'];
@@ -13,12 +15,6 @@ interface OrganizationWithServices extends Organization {
     notes: string | null;
     service_name: string;
   }>;
-}
-
-declare global {
-  interface Window {
-    google: any;
-  }
 }
 
 const boroughCoordinates: Record<string, { lat: number; lng: number }> = {
@@ -36,21 +32,21 @@ function MapView() {
   const [filterType, setFilterType] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const mapRef = useRef<HTMLDivElement>(null);
-  const googleMapRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
+  const leafletMapRef = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
 
   useEffect(() => {
     loadData();
   }, []);
 
   useEffect(() => {
-    if (!loading && organizations.length > 0 && window.google && mapRef.current && !googleMapRef.current) {
+    if (!loading && organizations.length > 0 && mapRef.current && !leafletMapRef.current) {
       initializeMap();
     }
   }, [loading, organizations]);
 
   useEffect(() => {
-    if (googleMapRef.current) {
+    if (leafletMapRef.current) {
       updateMarkers();
     }
   }, [filterBorough, filterType, organizations]);
@@ -104,31 +100,23 @@ function MapView() {
   };
 
   const initializeMap = () => {
-    if (!window.google || !mapRef.current) return;
+    if (!mapRef.current) return;
 
-    const map = new window.google.maps.Map(mapRef.current, {
-      center: { lat: 40.7128, lng: -73.9060 },
-      zoom: 10,
-      styles: [
-        {
-          featureType: 'poi',
-          elementType: 'labels',
-          stylers: [{ visibility: 'off' }]
-        }
-      ],
-      mapTypeControl: true,
-      streetViewControl: false,
-      fullscreenControl: true,
-    });
+    const map = L.map(mapRef.current).setView([40.7128, -73.9060], 10);
 
-    googleMapRef.current = map;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map);
+
+    leafletMapRef.current = map;
     updateMarkers();
   };
 
   const updateMarkers = () => {
-    if (!googleMapRef.current || !window.google) return;
+    if (!leafletMapRef.current) return;
 
-    markersRef.current.forEach(marker => marker.setMap(null));
+    markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
     const filteredOrgs = organizations.filter(org => {
@@ -149,76 +137,89 @@ function MapView() {
                     count < 3 ? '#f59e0b' :
                     count < 5 ? '#3b82f6' : '#10b981';
 
-      const marker = new window.google.maps.Marker({
-        position: coords,
-        map: googleMapRef.current,
-        title: `${borough}: ${count} organizations`,
-        label: {
-          text: count.toString(),
-          color: 'white',
-          fontSize: '14px',
-          fontWeight: 'bold',
-        },
-        icon: {
-          path: window.google.maps.SymbolPath.CIRCLE,
-          scale: count === 0 ? 15 : count < 3 ? 20 : count < 5 ? 25 : 30,
-          fillColor: color,
-          fillOpacity: 0.9,
-          strokeColor: 'white',
-          strokeWeight: 2,
-        },
+      const size = count === 0 ? 30 : count < 3 ? 40 : count < 5 ? 50 : 60;
+
+      const icon = L.divIcon({
+        className: 'custom-marker',
+        html: `
+          <div style="
+            width: ${size}px;
+            height: ${size}px;
+            background-color: ${color};
+            border: 3px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          ">${count}</div>
+        `,
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2],
       });
 
-      const infoContent = `
-        <div style="padding: 8px; max-width: 200px;">
+      const marker = L.marker([coords.lat, coords.lng], { icon }).addTo(leafletMapRef.current!);
+
+      marker.bindPopup(`
+        <div style="padding: 8px;">
           <h3 style="margin: 0 0 8px 0; font-size: 16px; color: #2c3e50;">${borough}</h3>
           <p style="margin: 0; font-size: 14px; color: #64748b;">${count} organization${count !== 1 ? 's' : ''}</p>
         </div>
-      `;
+      `);
 
-      const infoWindow = new window.google.maps.InfoWindow({
-        content: infoContent,
-      });
-
-      marker.addListener('click', () => {
-        markersRef.current.forEach(m => {
-          if (m.infoWindow) m.infoWindow.close();
-        });
-        infoWindow.open(googleMapRef.current, marker);
+      marker.on('click', () => {
         setFilterBorough(filterBorough === borough ? 'all' : borough);
       });
 
-      marker.infoWindow = infoWindow;
       markersRef.current.push(marker);
     });
 
     filteredOrgs.forEach(org => {
       if (!org.address) return;
 
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ address: org.address }, (results: any, status: any) => {
-        if (status === 'OK' && results[0]) {
-          const orgMarker = new window.google.maps.Marker({
-            position: results[0].geometry.location,
-            map: googleMapRef.current,
-            title: org.name,
-            icon: {
-              path: window.google.maps.SymbolPath.CIRCLE,
-              scale: 8,
-              fillColor: '#2c3e50',
-              fillOpacity: 0.8,
-              strokeColor: 'white',
-              strokeWeight: 2,
-            },
-          });
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(org.address + ', New York, NY')}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            const { lat, lon } = data[0];
 
-          orgMarker.addListener('click', () => {
-            setSelectedOrg(org);
-          });
+            const icon = L.divIcon({
+              className: 'org-marker',
+              html: `
+                <div style="
+                  width: 16px;
+                  height: 16px;
+                  background-color: #2c3e50;
+                  border: 2px solid white;
+                  border-radius: 50%;
+                  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                "></div>
+              `,
+              iconSize: [16, 16],
+              iconAnchor: [8, 8],
+            });
 
-          markersRef.current.push(orgMarker);
-        }
-      });
+            const marker = L.marker([parseFloat(lat), parseFloat(lon)], { icon })
+              .addTo(leafletMapRef.current!);
+
+            marker.bindPopup(`
+              <div style="padding: 8px; max-width: 200px;">
+                <h4 style="margin: 0 0 6px 0; font-size: 14px; color: #2c3e50;">${org.name}</h4>
+                <p style="margin: 0; font-size: 12px; color: #64748b;">${org.type.replace('_', ' ')}</p>
+              </div>
+            `);
+
+            marker.on('click', () => {
+              setSelectedOrg(org);
+            });
+
+            markersRef.current.push(marker);
+          }
+        })
+        .catch(err => console.error('Geocoding error:', err));
     });
   };
 
@@ -279,7 +280,7 @@ function MapView() {
       </div>
 
       <div className="map-container-with-sidebar">
-        <div ref={mapRef} className="google-map"></div>
+        <div ref={mapRef} className="leaflet-map"></div>
 
         {selectedOrg && (
           <div className="org-detail-sidebar">
@@ -373,9 +374,8 @@ function MapView() {
               className={`summary-card ${filterBorough === borough ? 'active' : ''}`}
               onClick={() => {
                 setFilterBorough(filterBorough === borough ? 'all' : borough);
-                if (googleMapRef.current) {
-                  googleMapRef.current.panTo(boroughCoordinates[borough]);
-                  googleMapRef.current.setZoom(12);
+                if (leafletMapRef.current) {
+                  leafletMapRef.current.setView([boroughCoordinates[borough].lat, boroughCoordinates[borough].lng], 12);
                 }
               }}
             >

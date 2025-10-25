@@ -91,12 +91,19 @@
   position: relative;
 }
 
-.google-map {
+.leaflet-map {
   width: 100%;
   height: 100%;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.custom-marker,
+.org-marker {
+  background: transparent;
+  border: none;
 }
 
 .org-detail-sidebar {
@@ -323,7 +330,7 @@
     height: auto;
   }
 
-  .google-map {
+  .leaflet-map {
     height: 500px;
   }
 
@@ -354,7 +361,7 @@
     min-width: 100%;
   }
 
-  .google-map {
+  .leaflet-map {
     height: 400px;
   }
 
