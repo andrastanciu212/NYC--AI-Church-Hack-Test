@@ -252,87 +252,6 @@ function GapAnalysis() {
         </button>
       </div>
 
-      <section className="coverage-section">
-        <div className="coverage-header-section">
-          <h3>Service Coverage Heatmap</h3>
-          <div className="view-mode-toggle">
-            <button
-              className={viewMode === 'borough' ? 'active' : ''}
-              onClick={() => {
-                setViewMode('borough');
-                setFilterBorough('all');
-                setFilterNeighborhood('all');
-              }}
-            >
-              By Borough
-            </button>
-            <button
-              className={viewMode === 'neighborhood' ? 'active' : ''}
-              onClick={() => setViewMode('neighborhood')}
-            >
-              By Neighborhood
-            </button>
-          </div>
-        </div>
-
-        {viewMode === 'neighborhood' && (
-          <div className="neighborhood-selector">
-            <select value={filterBorough} onChange={(e) => {
-              setFilterBorough(e.target.value);
-              setFilterNeighborhood('all');
-            }}>
-              <option value="all">Select a Borough</option>
-              {boroughs.map(borough => (
-                <option key={borough} value={borough}>{borough}</option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        <div className="coverage-table-wrapper">
-          <div className="coverage-table">
-            <div className="coverage-header">
-              <div className="coverage-cell header-cell">Service</div>
-              {viewMode === 'borough' ? (
-                boroughs.map(borough => (
-                  <div key={borough} className="coverage-cell header-cell">
-                    {borough}
-                  </div>
-                ))
-              ) : filterBorough === 'all' ? (
-                <div className="coverage-cell header-cell">Select a borough to view neighborhoods</div>
-              ) : (
-                availableNeighborhoods.map(neighborhood => (
-                  <div key={neighborhood} className="coverage-cell header-cell neighborhood-header">
-                    {neighborhood}
-                  </div>
-                ))
-              )}
-            </div>
-            {filteredCoverage.map(service => (
-              <div key={service.category_id} className="coverage-row">
-                <div className="coverage-cell service-name">{service.category_name}</div>
-                {viewMode === 'borough' || filterBorough !== 'all' ? (
-                  service.coverage.map(({ borough, neighborhood, count }) => (
-                    <div
-                      key={viewMode === 'borough' ? borough : `${borough}-${neighborhood}`}
-                      className={`coverage-cell coverage-value ${
-                        count === 0 ? 'no-coverage' : count < 2 ? 'low-coverage' : count < 4 ? 'medium-coverage' : 'high-coverage'
-                      }`}
-                      title={`${count} organizations providing ${service.category_name} in ${neighborhood || borough}`}
-                    >
-                      {count}
-                    </div>
-                  ))
-                ) : (
-                  <div className="coverage-cell">-</div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="gaps-section">
         <div className="gaps-header">
           <div className="gaps-header-left">
@@ -476,6 +395,87 @@ function GapAnalysis() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="coverage-section">
+        <div className="coverage-header-section">
+          <h3>Service Coverage Heatmap</h3>
+          <div className="view-mode-toggle">
+            <button
+              className={viewMode === 'borough' ? 'active' : ''}
+              onClick={() => {
+                setViewMode('borough');
+                setFilterBorough('all');
+                setFilterNeighborhood('all');
+              }}
+            >
+              By Borough
+            </button>
+            <button
+              className={viewMode === 'neighborhood' ? 'active' : ''}
+              onClick={() => setViewMode('neighborhood')}
+            >
+              By Neighborhood
+            </button>
+          </div>
+        </div>
+
+        {viewMode === 'neighborhood' && (
+          <div className="neighborhood-selector">
+            <select value={filterBorough} onChange={(e) => {
+              setFilterBorough(e.target.value);
+              setFilterNeighborhood('all');
+            }}>
+              <option value="all">Select a Borough</option>
+              {boroughs.map(borough => (
+                <option key={borough} value={borough}>{borough}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className="coverage-table-wrapper">
+          <div className="coverage-table">
+            <div className="coverage-header">
+              <div className="coverage-cell header-cell">Service</div>
+              {viewMode === 'borough' ? (
+                boroughs.map(borough => (
+                  <div key={borough} className="coverage-cell header-cell">
+                    {borough}
+                  </div>
+                ))
+              ) : filterBorough === 'all' ? (
+                <div className="coverage-cell header-cell">Select a borough to view neighborhoods</div>
+              ) : (
+                availableNeighborhoods.map(neighborhood => (
+                  <div key={neighborhood} className="coverage-cell header-cell neighborhood-header">
+                    {neighborhood}
+                  </div>
+                ))
+              )}
+            </div>
+            {filteredCoverage.map(service => (
+              <div key={service.category_id} className="coverage-row">
+                <div className="coverage-cell service-name">{service.category_name}</div>
+                {viewMode === 'borough' || filterBorough !== 'all' ? (
+                  service.coverage.map(({ borough, neighborhood, count }) => (
+                    <div
+                      key={viewMode === 'borough' ? borough : `${borough}-${neighborhood}`}
+                      className={`coverage-cell coverage-value ${
+                        count === 0 ? 'no-coverage' : count < 2 ? 'low-coverage' : count < 4 ? 'medium-coverage' : 'high-coverage'
+                      }`}
+                      title={`${count} organizations providing ${service.category_name} in ${neighborhood || borough}`}
+                    >
+                      {count}
+                    </div>
+                  ))
+                ) : (
+                  <div className="coverage-cell">-</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {showForm && (
