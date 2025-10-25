@@ -22,7 +22,7 @@
 
 .org-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
 }
 
@@ -160,5 +160,79 @@
 @media (max-width: 768px) {
   .org-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .org-card {
+    padding: 20px;
+  }
+
+  .org-card h3 {
+    font-size: 16px;
+  }
+
+  .org-detail {
+    font-size: 13px;
+  }
+
+  .empty-state {
+    padding: 48px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .org-grid {
+    gap: 12px;
+  }
+
+  .org-card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .org-card h3 {
+    font-size: 15px;
+  }
+
+  .org-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-edit {
+    align-self: stretch;
+    text-align: center;
+  }
+
+  .org-detail {
+    font-size: 12px;
+  }
+
+  .org-type,
+  .org-borough,
+  .org-inactive {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .service-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .contact-link {
+    font-size: 12px;
+  }
+
+  .empty-state {
+    padding: 32px 16px;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+  }
+
+  .empty-hint {
+    font-size: 13px;
   }
 }

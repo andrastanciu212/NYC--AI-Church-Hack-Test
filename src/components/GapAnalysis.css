@@ -39,7 +39,7 @@
 .coverage-header,
 .coverage-row {
   display: grid;
-  grid-template-columns: 200px repeat(5, 1fr);
+  grid-template-columns: 160px repeat(5, 1fr);
   gap: 8px;
   margin-bottom: 8px;
 }
@@ -265,15 +265,29 @@
 @media (max-width: 1024px) {
   .coverage-header,
   .coverage-row {
-    grid-template-columns: 150px repeat(5, 80px);
+    grid-template-columns: 140px repeat(5, 70px);
+  }
+
+  .coverage-cell {
+    font-size: 13px;
+    padding: 10px 8px;
   }
 }
 
 @media (max-width: 768px) {
+  .gap-analysis {
+    gap: 24px;
+  }
+
   .gap-header,
   .gaps-header {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .gap-header h2,
+  .gaps-header h3 {
+    font-size: 20px;
   }
 
   .gap-filters {
@@ -284,11 +298,109 @@
     width: 100%;
   }
 
+  .coverage-section {
+    padding: 20px;
+  }
+
+  .coverage-section h3 {
+    font-size: 16px;
+  }
+
   .coverage-table {
     overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .coverage-header,
+  .coverage-row {
+    grid-template-columns: 120px repeat(5, 60px);
+  }
+
+  .coverage-cell {
+    font-size: 12px;
+    padding: 8px 4px;
+  }
+
+  .gap-card {
+    padding: 16px;
+  }
+
+  .gap-card h4 {
+    font-size: 15px;
   }
 
   .gap-card-header {
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .status-select {
+    align-self: stretch;
+  }
+
+  .gap-description {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gap-analysis {
+    gap: 20px;
+  }
+
+  .gap-header h2,
+  .gaps-header h3 {
+    font-size: 18px;
+  }
+
+  .coverage-section {
+    padding: 16px;
+  }
+
+  .coverage-section h3 {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .coverage-header,
+  .coverage-row {
+    grid-template-columns: 100px repeat(5, 50px);
+    gap: 4px;
+  }
+
+  .coverage-cell {
+    font-size: 11px;
+    padding: 6px 2px;
+  }
+
+  .gaps-list {
+    gap: 12px;
+  }
+
+  .gap-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .gap-card h4 {
+    font-size: 14px;
+  }
+
+  .gap-description {
+    font-size: 12px;
+  }
+
+  .severity-badge,
+  .borough-badge {
+    font-size: 10px;
+    padding: 3px 10px;
+  }
+
+  .neighborhood-text {
+    font-size: 12px;
+  }
+
+  .gap-footer {
+    font-size: 12px;
   }
 }

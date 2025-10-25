@@ -79,9 +79,32 @@
 @media (max-width: 768px) {
   .gap-form {
     padding: 24px 20px;
+    gap: 20px;
   }
 
   .severity-options {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .severity-label {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gap-form {
+    padding: 20px 16px;
+    gap: 16px;
+  }
+
+  .severity-options {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .severity-label {
+    padding: 12px;
+    font-size: 14px;
   }
 }

@@ -40,7 +40,7 @@ input,
 select,
 textarea {
   font-family: inherit;
-  font-size: inherit;
+  font-size: 16px;
   border: 1px solid #cbd5e0;
   border-radius: 6px;
   padding: 8px 12px;
@@ -65,4 +65,10 @@ label {
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
 }

@@ -340,9 +340,18 @@
 }
 
 @media (max-width: 768px) {
+  .map-view {
+    gap: 20px;
+  }
+
   .map-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
+  }
+
+  .map-header h2 {
+    font-size: 20px;
   }
 
   .map-legend {
@@ -351,10 +360,17 @@
 
   .legend-item {
     flex: 1 1 calc(50% - 10px);
+    font-size: 12px;
+  }
+
+  .legend-marker {
+    width: 16px;
+    height: 16px;
   }
 
   .map-filters {
     flex-direction: column;
+    padding: 16px;
   }
 
   .filter-group {
@@ -363,9 +379,138 @@
 
   .leaflet-map {
     height: 400px;
+    border-radius: 8px;
+  }
+
+  .org-detail-sidebar {
+    padding: 20px;
+    max-height: 350px;
+  }
+
+  .sidebar-header h3 {
+    font-size: 16px;
+  }
+
+  .detail-section {
+    font-size: 13px;
+  }
+
+  .map-summary {
+    padding: 20px;
+  }
+
+  .map-summary h3 {
+    font-size: 16px;
   }
 
   .summary-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .summary-count {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-view {
+    gap: 16px;
+  }
+
+  .map-header h2 {
+    font-size: 18px;
+  }
+
+  .map-legend {
+    gap: 12px;
+  }
+
+  .legend-item {
+    font-size: 11px;
+  }
+
+  .legend-marker {
+    width: 14px;
+    height: 14px;
+  }
+
+  .map-filters {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .filter-group label {
+    font-size: 13px;
+  }
+
+  .filter-group select {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .leaflet-map {
+    height: 350px;
+  }
+
+  .org-detail-sidebar {
+    padding: 16px;
+    max-height: 300px;
+  }
+
+  .sidebar-header h3 {
+    font-size: 15px;
+  }
+
+  .detail-section {
+    font-size: 12px;
+  }
+
+  .detail-section strong {
+    font-size: 12px;
+  }
+
+  .org-type-badge,
+  .org-borough-badge {
+    font-size: 10px;
+    padding: 3px 10px;
+  }
+
+  .service-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .contact-link {
+    font-size: 12px;
+  }
+
+  .map-summary {
+    padding: 16px;
+  }
+
+  .map-summary h3 {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .summary-card {
+    padding: 16px;
+  }
+
+  .summary-borough {
+    font-size: 13px;
+  }
+
+  .summary-count {
+    font-size: 24px;
+  }
+
+  .summary-label {
+    font-size: 11px;
   }
 }
