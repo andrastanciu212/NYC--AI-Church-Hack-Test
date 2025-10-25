@@ -1,7 +1,7 @@
 .map-view {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .map-header {
@@ -56,80 +56,50 @@
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 }
 
-.map-container {
+.map-filters {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.filter-group select {
+  padding: 10px 12px;
+}
+
+.map-container-with-sidebar {
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: 24px;
-  min-height: 600px;
+  height: 600px;
+  position: relative;
 }
 
-.map-canvas {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border-radius: 16px;
-  padding: 40px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.borough-map {
+.google-map {
   width: 100%;
   height: 100%;
-  max-width: 600px;
-  max-height: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.borough-marker {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  stroke: white;
-  stroke-width: 2;
-}
-
-.borough-marker.high {
-  fill: #10b981;
-}
-
-.borough-marker.medium {
-  fill: #3b82f6;
-}
-
-.borough-marker.low {
-  fill: #f59e0b;
-}
-
-.borough-marker.none {
-  fill: #ef4444;
-}
-
-.borough-marker:hover {
-  transform: scale(1.1);
-  stroke-width: 3;
-}
-
-.borough-marker.selected {
-  stroke: #2c3e50;
-  stroke-width: 3;
-  filter: brightness(1.1);
-}
-
-.borough-count {
-  font-size: 16px;
-  font-weight: 700;
-  fill: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.borough-label {
-  font-size: 10px;
-  font-weight: 600;
-  fill: #2c3e50;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.borough-detail {
+.org-detail-sidebar {
   background: white;
   border-radius: 12px;
   padding: 24px;
@@ -137,25 +107,27 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: 600px;
   overflow: hidden;
 }
 
-.borough-detail-header {
+.sidebar-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 12px;
   padding-bottom: 16px;
   border-bottom: 2px solid #e2e8f0;
 }
 
-.borough-detail-header h3 {
-  font-size: 20px;
+.sidebar-header h3 {
+  font-size: 18px;
   font-weight: 600;
   color: #2c3e50;
+  line-height: 1.3;
+  flex: 1;
 }
 
-.close-detail {
+.close-sidebar {
   background: #f1f5f9;
   color: #64748b;
   width: 32px;
@@ -165,58 +137,15 @@
   align-items: center;
   justify-content: center;
   font-size: 18px;
+  flex-shrink: 0;
 }
 
-.close-detail:hover {
+.close-sidebar:hover {
   background: #e2e8f0;
   color: #334155;
 }
 
-.borough-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.stat-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background: #f8fafc;
-  border-radius: 6px;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #64748b;
-  font-weight: 500;
-}
-
-.stat-value {
-  font-size: 16px;
-  color: #2c3e50;
-  font-weight: 700;
-}
-
-.filter-section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.filter-section label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #2c3e50;
-}
-
-.filter-section select {
-  width: 100%;
-  padding: 10px 12px;
-}
-
-.org-list-scroll {
+.sidebar-content {
   flex: 1;
   overflow-y: auto;
   display: flex;
@@ -225,46 +154,31 @@
   padding-right: 8px;
 }
 
-.org-list-scroll::-webkit-scrollbar {
+.sidebar-content::-webkit-scrollbar {
   width: 6px;
 }
 
-.org-list-scroll::-webkit-scrollbar-track {
+.sidebar-content::-webkit-scrollbar-track {
   background: #f1f5f9;
   border-radius: 3px;
 }
 
-.org-list-scroll::-webkit-scrollbar-thumb {
+.sidebar-content::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 3px;
 }
 
-.org-list-scroll::-webkit-scrollbar-thumb:hover {
+.sidebar-content::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-.org-item {
-  padding: 16px;
-  background: #f8fafc;
-  border-radius: 8px;
-  border-left: 4px solid #3b82f6;
-  transition: all 0.2s ease;
-}
-
-.org-item:hover {
-  background: #f1f5f9;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.org-item h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 8px;
+.org-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .org-type-badge {
-  display: inline-block;
   padding: 4px 12px;
   background: #dbeafe;
   color: #1e40af;
@@ -273,35 +187,65 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 8px;
 }
 
-.org-neighborhood {
+.org-borough-badge {
+  padding: 4px 12px;
+  background: #f0fdf4;
+  color: #166534;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.detail-section {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.detail-section strong {
+  display: block;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 6px;
   font-size: 13px;
-  color: #64748b;
-  margin-bottom: 8px;
+}
+
+.detail-section p {
+  margin: 0;
+}
+
+.service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.service-tag {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 500;
 }
 
-.org-description {
-  font-size: 13px;
-  color: #475569;
-  line-height: 1.5;
-  margin-bottom: 8px;
+.contact-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.org-contact {
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.org-contact a {
+.contact-link {
   color: #3b82f6;
   text-decoration: none;
   font-weight: 500;
+  font-size: 13px;
 }
 
-.org-contact a:hover {
+.contact-link:hover {
   text-decoration: underline;
 }
 
@@ -373,12 +317,17 @@
   letter-spacing: 0.5px;
 }
 
-@media (max-width: 1024px) {
-  .map-container {
+@media (max-width: 1200px) {
+  .map-container-with-sidebar {
     grid-template-columns: 1fr;
+    height: auto;
   }
 
-  .borough-detail {
+  .google-map {
+    height: 500px;
+  }
+
+  .org-detail-sidebar {
     max-height: 400px;
   }
 }
@@ -397,8 +346,16 @@
     flex: 1 1 calc(50% - 10px);
   }
 
-  .map-canvas {
-    padding: 20px;
+  .map-filters {
+    flex-direction: column;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+
+  .google-map {
+    height: 400px;
   }
 
   .summary-grid {
