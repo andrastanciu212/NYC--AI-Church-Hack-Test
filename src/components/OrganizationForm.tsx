@@ -54,8 +54,8 @@ function OrganizationForm({ organization, serviceCategories, onClose, onSuccess 
     if (organization) {
       setFormData({
         name: organization.name,
-        type: organization.type,
-        borough: organization.borough,
+        type: organization.type as any,
+        borough: organization.borough as any,
         neighborhood: organization.neighborhood || '',
         address: organization.address || '',
         contact_email: organization.contact_email || '',

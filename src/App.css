@@ -71,6 +71,13 @@
   width: 100%;
 }
 
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.profile-button,
 .sign-out-button {
   padding: 10px 20px;
   background: rgba(255, 255, 255, 0.15);
@@ -84,6 +91,7 @@
   white-space: nowrap;
 }
 
+.profile-button:hover,
 .sign-out-button:hover {
   background: rgba(255, 255, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.5);
