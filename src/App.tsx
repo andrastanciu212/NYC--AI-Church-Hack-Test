@@ -29,8 +29,8 @@ function AppContent() {
     <div className="app">
       <header className="header">
         <div className="header-content">
-          <h1>NYC Ecosystem Gap Finder</h1>
-          <p className="tagline">Mapping faith and community resources across the 5 boroughs</p>
+          <h1>See New York</h1>
+          <p className="tagline">Mapping community resources across the 5 boroughs</p>
         </div>
         <button onClick={signOut} className="sign-out-button">
           Sign Out

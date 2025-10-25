@@ -53,7 +53,7 @@ function Login({ onLogin }: LoginProps) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>NYC Ecosystem Gap Finder</h1>
+        <h1>See New York</h1>
         <p className="login-subtitle">
           Track and analyze service gaps across New York City
         </p>
