@@ -1,0 +1,407 @@
+.map-view {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.map-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.map-legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.legend-marker {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.legend-marker.high {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.legend-marker.medium {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.legend-marker.low {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.legend-marker.none {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.map-container {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  min-height: 600px;
+}
+
+.map-canvas {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.borough-map {
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+  max-height: 600px;
+}
+
+.borough-marker {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  stroke: white;
+  stroke-width: 2;
+}
+
+.borough-marker.high {
+  fill: #10b981;
+}
+
+.borough-marker.medium {
+  fill: #3b82f6;
+}
+
+.borough-marker.low {
+  fill: #f59e0b;
+}
+
+.borough-marker.none {
+  fill: #ef4444;
+}
+
+.borough-marker:hover {
+  transform: scale(1.1);
+  stroke-width: 3;
+}
+
+.borough-marker.selected {
+  stroke: #2c3e50;
+  stroke-width: 3;
+  filter: brightness(1.1);
+}
+
+.borough-count {
+  font-size: 16px;
+  font-weight: 700;
+  fill: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.borough-label {
+  font-size: 10px;
+  font-weight: 600;
+  fill: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.borough-detail {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 600px;
+  overflow: hidden;
+}
+
+.borough-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.borough-detail-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.close-detail {
+  background: #f1f5f9;
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.close-detail:hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.borough-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 16px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-section label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.filter-section select {
+  width: 100%;
+  padding: 10px 12px;
+}
+
+.org-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 8px;
+}
+
+.org-list-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.org-list-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.org-list-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.org-list-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.org-item {
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+  transition: all 0.2s ease;
+}
+
+.org-item:hover {
+  background: #f1f5f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.org-item h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.org-type-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.org-neighborhood {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.org-description {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.org-contact {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.org-contact a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.org-contact a:hover {
+  text-decoration: underline;
+}
+
+.map-summary {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.map-summary h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.summary-card {
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.summary-card:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card.active {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.summary-borough {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.summary-count {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2c3e50;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.summary-card.active .summary-count {
+  color: #3b82f6;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 1024px) {
+  .map-container {
+    grid-template-columns: 1fr;
+  }
+
+  .borough-detail {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .map-legend {
+    width: 100%;
+  }
+
+  .legend-item {
+    flex: 1 1 calc(50% - 10px);
+  }
+
+  .map-canvas {
+    padding: 20px;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

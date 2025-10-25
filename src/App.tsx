@@ -2,9 +2,10 @@ import { useState } from 'react';
 import Dashboard from './components/Dashboard';
 import OrganizationManager from './components/OrganizationManager';
 import GapAnalysis from './components/GapAnalysis';
+import MapView from './components/MapView';
 import './App.css';
 
-type View = 'dashboard' | 'organizations' | 'gaps';
+type View = 'dashboard' | 'organizations' | 'gaps' | 'map';
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
@@ -26,6 +27,12 @@ function App() {
           Dashboard
         </button>
         <button
+          className={currentView === 'map' ? 'active' : ''}
+          onClick={() => setCurrentView('map')}
+        >
+          Map
+        </button>
+        <button
           className={currentView === 'organizations' ? 'active' : ''}
           onClick={() => setCurrentView('organizations')}
         >
@@ -41,6 +48,7 @@ function App() {
 
       <main className="main">
         {currentView === 'dashboard' && <Dashboard />}
+        {currentView === 'map' && <MapView />}
         {currentView === 'organizations' && <OrganizationManager />}
         {currentView === 'gaps' && <GapAnalysis />}
       </main>
