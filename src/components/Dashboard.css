@@ -29,8 +29,8 @@
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-  border-color: #1d1d1f;
+  box-shadow: 0 12px 40px rgba(0, 113, 227, 0.15);
+  border-color: #0071e3;
 }
 
 .stat-card.critical {
@@ -113,7 +113,7 @@
 
 .breakdown-bar {
   height: 100%;
-  background: #1d1d1f;
+  background: linear-gradient(90deg, #0071e3 0%, #00a4dc 100%);
   border-radius: 3px;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }

@@ -95,7 +95,7 @@
 
 .submit-button {
   padding: 16px;
-  background: #1d1d1f;
+  background: linear-gradient(135deg, #0071e3 0%, #00a4dc 100%);
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -107,8 +107,8 @@
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #000000;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #0077ed 0%, #00b0f0 100%);
+  box-shadow: 0 12px 30px rgba(0, 113, 227, 0.4);
 }
 
 .submit-button:active:not(:disabled) {
@@ -134,7 +134,7 @@
 .toggle-button {
   background: none;
   border: none;
-  color: #1d1d1f;
+  color: #0071e3;
   font-weight: 500;
   cursor: pointer;
   padding: 0;
@@ -144,7 +144,7 @@
 }
 
 .toggle-button:hover:not(:disabled) {
-  color: #000000;
+  color: #0077ed;
 }
 
 .toggle-button:disabled {
