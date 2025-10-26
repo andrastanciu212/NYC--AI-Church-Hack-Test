@@ -1,7 +1,7 @@
 .gap-analysis {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 48px;
 }
 
 .gap-header {
@@ -13,16 +13,17 @@
 }
 
 .gap-header h2 {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 600;
-  color: #2c3e50;
+  color: #1d1d1f;
+  letter-spacing: -0.03em;
 }
 
 .coverage-section {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid #d2d2d7;
 }
 
 .coverage-header-section {
@@ -35,38 +36,40 @@
 }
 
 .coverage-section h3 {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 600;
-  color: #2c3e50;
+  color: #1d1d1f;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .view-mode-toggle {
   display: flex;
-  gap: 8px;
-  background: #f1f5f9;
-  padding: 4px;
-  border-radius: 8px;
+  gap: 0;
+  background: #f5f5f7;
+  padding: 3px;
+  border-radius: 10px;
 }
 
 .view-mode-toggle button {
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
   font-weight: 500;
   background: transparent;
-  color: #64748b;
+  color: #86868b;
   transition: all 0.2s;
+  letter-spacing: -0.01em;
 }
 
 .view-mode-toggle button:hover {
-  color: #2c3e50;
+  color: #1d1d1f;
 }
 
 .view-mode-toggle button.active {
-  background: white;
-  color: #3b82f6;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  color: #1d1d1f;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .neighborhood-selector {
@@ -163,7 +166,7 @@
 .gaps-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .gaps-header {
@@ -181,32 +184,34 @@
 }
 
 .gaps-header h3 {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 600;
-  color: #2c3e50;
+  color: #1d1d1f;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .toggle-view-button {
-  padding: 8px 16px;
-  background: #f1f5f9;
-  color: #64748b;
+  padding: 8px 18px;
+  background: #f5f5f7;
+  color: #86868b;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 10px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  letter-spacing: -0.01em;
 }
 
 .toggle-view-button:hover {
-  background: #e2e8f0;
-  color: #2c3e50;
+  background: #e5e5ea;
+  color: #1d1d1f;
 }
 
 .toggle-view-button.active {
-  background: #3b82f6;
-  color: white;
+  background: #1d1d1f;
+  color: #ffffff;
 }
 
 .gap-filters {
@@ -227,17 +232,18 @@
 }
 
 .gap-card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #d2d2d7;
+  border-left: 3px solid;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .gap-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  border-color: #1d1d1f;
 }
 
 .gap-card.severity-critical {
@@ -265,10 +271,11 @@
 }
 
 .gap-card h4 {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
-  color: #2c3e50;
+  color: #1d1d1f;
   margin-bottom: 8px;
+  letter-spacing: -0.01em;
 }
 
 .gap-meta {
@@ -359,10 +366,10 @@
 }
 
 .gaps-map-container {
-  background: white;
-  border-radius: 12px;
+  background: #ffffff;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d2d2d7;
 }
 
 .map-popup h4 {

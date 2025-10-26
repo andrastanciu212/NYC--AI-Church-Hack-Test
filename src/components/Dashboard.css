@@ -1,156 +1,162 @@
 .dashboard {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 48px;
 }
 
 .loading {
   text-align: center;
-  padding: 48px;
-  color: #64748b;
-  font-size: 16px;
+  padding: 80px;
+  color: #86868b;
+  font-size: 15px;
+  letter-spacing: -0.01em;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
 }
 
 .stat-card {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 40px 32px;
+  border-radius: 16px;
+  border: 1px solid #d2d2d7;
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  border-color: #1d1d1f;
 }
 
 .stat-card.critical {
-  border-left: 4px solid #ef4444;
+  border-left: 3px solid #ff3b30;
 }
 
 .stat-value {
-  font-size: 48px;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 8px;
+  font-size: 56px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 12px;
+  letter-spacing: -0.04em;
 }
 
 .stat-card.critical .stat-value {
-  color: #ef4444;
+  color: #ff3b30;
 }
 
 .stat-label {
-  font-size: 14px;
-  color: #64748b;
+  font-size: 12px;
+  color: #86868b;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.08em;
 }
 
 .breakdown-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 32px;
 }
 
 .breakdown-card {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid #d2d2d7;
 }
 
 .breakdown-card.map-card {
   display: flex;
   flex-direction: column;
-  min-height: 500px;
+  min-height: 560px;
 }
 
 .breakdown-card h2 {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 600;
-  margin-bottom: 20px;
-  color: #2c3e50;
+  margin-bottom: 32px;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
 }
 
 .breakdown-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 }
 
 .breakdown-item {
   display: grid;
-  grid-template-columns: 120px 1fr auto;
+  grid-template-columns: 140px 1fr auto;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .breakdown-label {
   font-size: 14px;
-  font-weight: 500;
-  color: #334155;
+  font-weight: 400;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
 .breakdown-bar-container {
-  background: #f1f5f9;
-  height: 8px;
-  border-radius: 4px;
+  background: #f5f5f7;
+  height: 6px;
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .breakdown-bar {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
-  border-radius: 4px;
-  transition: width 0.3s ease;
+  background: #1d1d1f;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .breakdown-value {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  color: #2c3e50;
-  min-width: 32px;
+  color: #1d1d1f;
+  min-width: 40px;
   text-align: right;
+  letter-spacing: -0.01em;
 }
 
 @media (max-width: 768px) {
   .dashboard {
-    gap: 24px;
+    gap: 32px;
   }
 
   .stats-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 20px;
   }
 
   .stat-card {
-    padding: 20px;
+    padding: 32px 24px;
   }
 
   .stat-value {
-    font-size: 36px;
+    font-size: 48px;
   }
 
   .breakdown-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 24px;
   }
 
   .breakdown-card {
-    padding: 20px;
+    padding: 32px 24px;
   }
 
   .breakdown-item {
-    grid-template-columns: 100px 1fr auto;
-    gap: 8px;
+    grid-template-columns: 120px 1fr auto;
+    gap: 12px;
   }
 
   .breakdown-label {
@@ -160,39 +166,41 @@
 
 @media (max-width: 480px) {
   .dashboard {
-    gap: 20px;
+    gap: 24px;
   }
 
   .stats-grid {
-    gap: 12px;
+    gap: 16px;
   }
 
   .stat-card {
-    padding: 16px;
+    padding: 24px 20px;
   }
 
   .stat-value {
-    font-size: 32px;
+    font-size: 40px;
   }
 
   .stat-label {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .breakdown-grid {
-    gap: 12px;
+    gap: 16px;
   }
 
   .breakdown-card {
-    padding: 16px;
+    padding: 24px 20px;
   }
 
   .breakdown-card h2 {
-    font-size: 16px;
+    font-size: 18px;
+    margin-bottom: 24px;
   }
 
   .breakdown-item {
-    grid-template-columns: 80px 1fr auto;
+    grid-template-columns: 100px 1fr auto;
+    gap: 12px;
   }
 
   .breakdown-label {
@@ -200,6 +208,6 @@
   }
 
   .breakdown-value {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
