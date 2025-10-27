@@ -92,7 +92,7 @@ function Login({ onLogin }: LoginProps) {
           </div>
 
           <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? 'Loading...' : isJoin ? 'Join' : 'Sign In'}
+            {loading ? 'Loading...' : isJoin ? 'JOIN' : 'Sign In'}
           </button>
 
           <div className="toggle-mode">
