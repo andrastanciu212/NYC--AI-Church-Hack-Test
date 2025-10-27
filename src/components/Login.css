@@ -94,25 +94,28 @@
 }
 
 .submit-button {
-  padding: 16px;
+  padding: 18px 24px;
   background: linear-gradient(135deg, #0071e3 0%, #00a4dc 100%);
   color: #ffffff;
   border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 500;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
 }
 
 .submit-button:hover:not(:disabled) {
   background: linear-gradient(135deg, #0077ed 0%, #00b0f0 100%);
   box-shadow: 0 12px 30px rgba(0, 113, 227, 0.4);
+  transform: translateY(-1px);
 }
 
 .submit-button:active:not(:disabled) {
   transform: translateY(0);
+  box-shadow: 0 6px 20px rgba(0, 113, 227, 0.3);
 }
 
 .submit-button:disabled {
