@@ -16,13 +16,17 @@
   backdrop-filter: saturate(180%) blur(20px);
 }
 
-.header-content {
+.header-wrapper {
   max-width: 1400px;
   margin: 0 auto;
   padding: 24px 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.header-content {
+  flex: 0 0 auto;
 }
 
 .header h1 {
@@ -128,8 +132,15 @@
 }
 
 @media (max-width: 768px) {
-  .header-content {
+  .header-wrapper {
     padding: 20px 24px;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .header-content {
+    text-align: center;
   }
 
   .header h1 {
@@ -159,7 +170,7 @@
 }
 
 @media (max-width: 480px) {
-  .header-content {
+  .header-wrapper {
     padding: 16px 20px;
   }
 

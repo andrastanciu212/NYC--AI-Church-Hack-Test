@@ -30,17 +30,19 @@ function AppContent() {
   return (
     <div className="app">
       <header className="header">
-        <div className="header-content">
-          <h1>See New York</h1>
-          <p className="tagline">Mapping community resources across the 5 boroughs</p>
-        </div>
-        <div className="header-actions">
-          <button onClick={() => setShowProfileForm(true)} className="profile-button">
-            Profile
-          </button>
-          <button onClick={signOut} className="sign-out-button">
-            Sign Out
-          </button>
+        <div className="header-wrapper">
+          <div className="header-content">
+            <h1>See New York</h1>
+            <p className="tagline">Mapping community resources across the 5 boroughs</p>
+          </div>
+          <div className="header-actions">
+            <button onClick={() => setShowProfileForm(true)} className="profile-button">
+              Profile
+            </button>
+            <button onClick={signOut} className="sign-out-button">
+              Sign Out
+            </button>
+          </div>
         </div>
       </header>
 
