@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
 import OrganizationForm from './OrganizationForm';
 import OrganizationList from './OrganizationList';
+import ImportData from './ImportData';
 import './OrganizationManager.css';
 
 type Organization = Database['public']['Tables']['organizations']['Row'];
@@ -23,6 +24,7 @@ function OrganizationManager() {
   const [serviceCategories, setServiceCategories] = useState<ServiceCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [showImport, setShowImport] = useState(false);
   const [editingOrg, setEditingOrg] = useState<OrganizationWithServices | null>(null);
   const [filterBorough, setFilterBorough] = useState<string>('all');
   const [filterType, setFilterType] = useState<string>('all');
@@ -116,9 +118,14 @@ function OrganizationManager() {
     <div className="org-manager">
       <div className="org-header">
         <h2>Organizations Directory</h2>
-        <button className="btn-primary" onClick={handleAddNew}>
-          Add Organization
-        </button>
+        <div className="org-header-actions">
+          <button className="btn-secondary" onClick={() => setShowImport(true)}>
+            Import Data
+          </button>
+          <button className="btn-primary" onClick={handleAddNew}>
+            Add Organization
+          </button>
+        </div>
       </div>
 
       <div className="org-filters">
@@ -165,6 +172,16 @@ function OrganizationManager() {
             />
           </div>
         </div>
+      )}
+
+      {showImport && (
+        <ImportData
+          onClose={() => setShowImport(false)}
+          onSuccess={() => {
+            setShowImport(false);
+            loadData();
+          }}
+        />
       )}
     </div>
   );
