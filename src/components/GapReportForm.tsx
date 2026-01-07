@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 import type { Database } from '../lib/database.types';
 import './GapReportForm.css';
 
@@ -21,6 +22,7 @@ interface FormData {
 }
 
 function GapReportForm({ serviceCategories, onClose, onSuccess }: Props) {
+  const { user } = useAuth();
   const [formData, setFormData] = useState<FormData>({
     service_category_id: '',
     borough: 'Manhattan',
@@ -39,6 +41,8 @@ function GapReportForm({ serviceCategories, onClose, onSuccess }: Props) {
     setSaving(true);
 
     try {
+      if (!user) throw new Error('You must be logged in to report a gap');
+
       const insertData = {
         service_category_id: formData.service_category_id,
         borough: formData.borough,
@@ -46,6 +50,7 @@ function GapReportForm({ serviceCategories, onClose, onSuccess }: Props) {
         severity: formData.severity,
         description: formData.description,
         reported_by: formData.reported_by || null,
+        created_by_user: user.id,
         status: 'open' as const,
       };
 

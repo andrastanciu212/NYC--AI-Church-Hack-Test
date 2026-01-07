@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 import type { Database } from '../lib/database.types';
 import type { OrganizationWithServices } from './OrganizationManager';
 import './OrganizationForm.css';
@@ -33,6 +34,7 @@ interface ServiceSelection {
 }
 
 function OrganizationForm({ organization, serviceCategories, onClose, onSuccess }: Props) {
+  const { user } = useAuth();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     type: 'church',
@@ -113,6 +115,8 @@ function OrganizationForm({ organization, serviceCategories, onClose, onSuccess 
         const deleteQuery: any = deleter.eq('organization_id', orgId);
         await deleteQuery;
       } else {
+        if (!user) throw new Error('You must be logged in to create an organization');
+
         const insertData = {
           name: formData.name,
           type: formData.type,
@@ -124,6 +128,7 @@ function OrganizationForm({ organization, serviceCategories, onClose, onSuccess 
           website: formData.website || null,
           description: formData.description || null,
           active: formData.active,
+          created_by: user.id,
         };
 
         const { data, error: insertError } = await supabase
@@ -138,11 +143,14 @@ function OrganizationForm({ organization, serviceCategories, onClose, onSuccess 
       }
 
       if (selectedServices.length > 0) {
+        if (!user) throw new Error('You must be logged in to add services');
+
         const servicesToInsert = selectedServices.map(s => ({
           organization_id: orgId,
           service_category_id: s.category_id,
           capacity: s.capacity || null,
           notes: s.notes || null,
+          created_by: user.id,
         }));
 
         const { error: servicesError } = await supabase

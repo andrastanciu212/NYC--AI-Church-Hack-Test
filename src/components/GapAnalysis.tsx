@@ -171,6 +171,7 @@ function GapAnalysis() {
             severity: gap.severity,
             description: gap.description,
             reported_by: gap.reported_by,
+            created_by_user: gap.created_by_user,
             status: gap.status,
             created_at: gap.created_at,
             updated_at: gap.updated_at,

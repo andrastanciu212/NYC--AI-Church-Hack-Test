@@ -14,6 +14,7 @@ export interface Database {
           website: string | null;
           description: string | null;
           active: boolean;
+          created_by: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -29,6 +30,7 @@ export interface Database {
           website?: string | null;
           description?: string | null;
           active?: boolean;
+          created_by?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -44,6 +46,7 @@ export interface Database {
           website?: string | null;
           description?: string | null;
           active?: boolean;
+          created_by?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -75,6 +78,7 @@ export interface Database {
           service_category_id: string;
           capacity: string | null;
           notes: string | null;
+          created_by: string | null;
           created_at: string;
         };
         Insert: {
@@ -83,6 +87,7 @@ export interface Database {
           service_category_id: string;
           capacity?: string | null;
           notes?: string | null;
+          created_by?: string | null;
           created_at?: string;
         };
         Update: {
@@ -91,6 +96,7 @@ export interface Database {
           service_category_id?: string;
           capacity?: string | null;
           notes?: string | null;
+          created_by?: string | null;
           created_at?: string;
         };
       };
@@ -103,6 +109,7 @@ export interface Database {
           severity: string;
           description: string;
           reported_by: string | null;
+          created_by_user: string | null;
           status: string;
           created_at: string;
           updated_at: string;
@@ -115,6 +122,7 @@ export interface Database {
           severity: string;
           description: string;
           reported_by?: string | null;
+          created_by_user?: string | null;
           status?: string;
           created_at?: string;
           updated_at?: string;
@@ -127,6 +135,7 @@ export interface Database {
           severity?: string;
           description?: string;
           reported_by?: string | null;
+          created_by_user?: string | null;
           status?: string;
           created_at?: string;
           updated_at?: string;
