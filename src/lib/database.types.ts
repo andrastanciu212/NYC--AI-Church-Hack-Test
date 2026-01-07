@@ -137,6 +137,9 @@ export interface Database {
           id: string;
           full_name: string;
           organization: string | null;
+          organization_type: string | null;
+          organization_email: string | null;
+          organization_phone: string | null;
           role: string | null;
           phone: string | null;
           created_at: string;
@@ -146,6 +149,9 @@ export interface Database {
           id: string;
           full_name: string;
           organization?: string | null;
+          organization_type?: string | null;
+          organization_email?: string | null;
+          organization_phone?: string | null;
           role?: string | null;
           phone?: string | null;
           created_at?: string;
@@ -155,6 +161,9 @@ export interface Database {
           id?: string;
           full_name?: string;
           organization?: string | null;
+          organization_type?: string | null;
+          organization_email?: string | null;
+          organization_phone?: string | null;
           role?: string | null;
           phone?: string | null;
           created_at?: string;
